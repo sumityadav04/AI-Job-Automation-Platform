@@ -1,27 +1,43 @@
 import streamlit as st
-import schedule
-import time
 import datetime
-import threading
 
-# -------------------------------
+st.set_page_config(page_title="SmartJob Automation", page_icon="⚡", layout="wide")
+st.title("⚡ SmartJob Automation Tool")
+st.subheader("Automating tasks with AI-powered scheduling")
+
+# Session state for logs
+if "logs" not in st.session_state:
+    st.session_state.logs = []
+
 # Job functions
-# -------------------------------
 def backup_database():
-    log = f"[{datetime.datetime.now()}] Database backup completed."
+    log = f"[{datetime.datetime.now()}] ✅ Database backup completed."
     st.session_state.logs.append(log)
 
 def send_report():
-    log = f"[{datetime.datetime.now()}] Daily report sent successfully."
+    log = f"[{datetime.datetime.now()}] 📤 Daily report sent successfully."
     st.session_state.logs.append(log)
 
-# -------------------------------
-# Scheduler Runner
-# -------------------------------
-def run_scheduler():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+def cleanup_temp():
+    log = f"[{datetime.datetime.now()}] 🗑️ Temporary files cleaned."
+    st.session_state.logs.append(log)
+
+# Sidebar controls
+st.sidebar.header("🛠 Job Control")
+if st.sidebar.button("Run Database Backup"):
+    backup_database()
+
+if st.sidebar.button("Send Daily Report"):
+    send_report()
+
+if st.sidebar.button("Clean Temporary Files"):
+    cleanup_temp()
+
+# Show logs
+st.header("📜 Automation Logs")
+for log in st.session_state.logs[-10:]:
+    st.write(log)
+
 
 # -------------------------------
 # Streamlit UI
